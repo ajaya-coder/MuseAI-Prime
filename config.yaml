@@ -1,0 +1,66 @@
+# MuseAI-Prime configuration file
+# ===============================
+
+# --------------------------------------------------
+# PATHS
+# --------------------------------------------------
+paths:
+  # Raw celeb faces (your unprocessed images)
+  content_raw: "data/content/faces/raw"
+
+  # Preprocessed faces (train/val/test will be created here)
+  content_processed: "data/content/faces"
+
+  # Raw style images, organized as:
+  #   data/style_raw/picasso/*.jpg
+  #   data/style_raw/rembrandt/*.jpg
+  style_raw: "data/style_raw"
+
+  # Where metadata CSVs will be written
+  metadata: "metadata"
+
+  # Where trained UNet checkpoints for Stable Diffusion are stored
+  checkpoints: "checkpoints"
+
+  # Generic outputs (sample grids, debug images, etc.)
+  outputs: "outputs"
+
+# --------------------------------------------------
+# PREPROCESSING (for faces / content images)
+# --------------------------------------------------
+preprocessing:
+  # Final resolution for faces (matches SD training)
+  image_size: 512
+
+  # How much to expand the detected face bounding box
+  # 1.4 = 40% more padding around the face
+  content_face_expand: 1.4
+
+  # Train / val / test split for faces
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+
+  # Reproducibility
+  random_seed: 42
+
+# --------------------------------------------------
+# TRAINING – Stable Diffusion style fine-tuning
+# (Informational; train_style_sd.py currently uses its own constants
+# but these values mirror that script so everything is documented here.)
+# --------------------------------------------------
+training:
+  sd_style:
+    base_model_id: "runwayml/stable-diffusion-v1-5"
+    image_size: 512
+    batch_size: 2
+    num_epochs: 10
+    learning_rate: 1.0e-5
+    num_workers: 4
+    num_train_timesteps: 1000
+    dtype: "float16"
+
+# --------------------------------------------------
+# DEVICE
+# --------------------------------------------------
+device: "cuda"

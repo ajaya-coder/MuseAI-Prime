@@ -1,0 +1,19 @@
+# Core scientific stack
+torch==2.3.1
+torchvision==0.18.1
+numpy
+pillow
+tqdm
+pyyaml
+
+# Hugging Face / diffusion tooling
+diffusers==0.29.0
+transformers>=4.40.0,<5.0.0
+accelerate>=0.30.0,<1.0.0
+safetensors>=0.4.0
+
+# Face detection / preprocessing
+facenet-pytorch>=2.5.3
+
+# Optional but handy
+pandas
