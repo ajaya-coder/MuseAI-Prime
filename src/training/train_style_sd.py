@@ -87,7 +87,7 @@ DTYPE = torch.float16     # mixed precision for speed / memory
 
 # Output dirs
 OUTPUT_DIR = PROJECT_ROOT / "outputs" / "sd_style_trained"
-CHECKPOINT_DIR = OUTPUT_DIR / "checkpoints"
+CHECKPOINT_DIR = PROJECT_ROOT / "checkpoints"
 SAMPLES_DIR = OUTPUT_DIR / "samples"
 for d in [OUTPUT_DIR, CHECKPOINT_DIR, SAMPLES_DIR]:
     d.mkdir(parents=True, exist_ok=True)
