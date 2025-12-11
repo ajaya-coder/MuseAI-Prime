@@ -7,30 +7,15 @@ Goal: Take a selfie/portrait and repaint it in the style of
 Picasso or Rembrandt using your fine-tuned Stable Diffusion UNet,
 then choose the best result based on face identity similarity.
 
-Pipeline:
-  1) Load fine-tuned UNet checkpoint into StableDiffusionImg2ImgPipeline.
-  2) Run img2img multiple times with the chosen artist style.
-  3) For each candidate, compute a FaceNet embedding of the face.
-  4) Compare candidates to the original face (cosine similarity).
-  5) Save all candidates + pick the best one (highest similarity).
-
 Usage example (from project root):
 
   python src/inference/img2img_style_identity.py \
-      --checkpoint outputs/sd_style_trained/checkpoints/sd_style_unet_epoch_010.pt \
-      --input_image path/to/selfie.jpg \
+      --checkpoint checkpoints/sd_style_unet_best.pt \
+      --input_image data/content/faces/raw/004132.jpg \
       --artist picasso \
-      --output_dir outputs/ibaka_style_tests/picasso \
+      --output_dir outputs/sd_results/picasso \
       --num_samples 6 \
       --strength 0.6
-
-  python src/inference/img2img_style_identity.py \
-      --checkpoint outputs/sd_style_trained/checkpoints/sd_style_unet_epoch_010.pt \
-      --input_image path/to/selfie.jpg \
-      --artist rembrandt \
-      --output_dir outputs/ibaka_style_tests/rembrandt \
-      --num_samples 6 \
-      --strength 0.55
 """
 
 import argparse
@@ -55,7 +40,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BASE_MODEL_ID = "runwayml/stable-diffusion-v1-5"
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-DTYPE = torch.float16
+# IMPORTANT: use float32 at inference to avoid NaNs / black outputs
+DTYPE = torch.float32
 
 IMAGE_SIZE = 512
 
@@ -106,13 +92,7 @@ def load_image_center_crop(path: Path, image_size: int = IMAGE_SIZE) -> Image.Im
 
 def simple_face_crop_for_facenet(pil_img: Image.Image) -> Image.Image:
     """
-    Very simple "face crop" for FaceNet:
-
-    For now, we assume the face is central in the 512x512 image.
-    We take a slightly smaller center crop to focus more on the face region
-    before resizing to 160x160 for FaceNet.
-
-    If you want to be fancier later, you can plug in your MTCNN-based crop.
+    Simple central crop to approximate the face region for FaceNet.
     """
     w, h = pil_img.size
     crop_ratio = 0.7  # take central 70% region
@@ -182,7 +162,7 @@ def build_pipe_with_checkpoint(checkpoint_path: Path) -> StableDiffusionImg2ImgP
     print(f"Loading base SD img2img pipeline: {BASE_MODEL_ID}")
     pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
         BASE_MODEL_ID,
-        torch_dtype=DTYPE,
+        torch_dtype=DTYPE,        # use float32 at inference
         safety_checker=None,
     )
     pipe.to(DEVICE)
@@ -232,16 +212,16 @@ def generate_stylized_candidates(
         generator = torch.Generator(device=DEVICE).manual_seed(seed)
         print(f"  → Sample {i+1}/{num_samples}, seed={seed}")
 
-        with torch.autocast("cuda", enabled=(DEVICE.type == "cuda")):
-            out = pipe(
-                prompt=prompt,
-                image=init_image,
-                strength=strength,
-                guidance_scale=guidance_scale,
-                num_inference_steps=steps,
-                negative_prompt=negative_prompt,
-                generator=generator,
-            )
+        # NO autocast: keep everything in full float32 for stability
+        out = pipe(
+            prompt=prompt,
+            image=init_image,
+            strength=strength,
+            guidance_scale=guidance_scale,
+            num_inference_steps=steps,
+            negative_prompt=negative_prompt,
+            generator=generator,
+        )
 
         img = out.images[0]
         results.append(img)
