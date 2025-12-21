@@ -61,10 +61,12 @@ ARTIST_PROMPTS = {
     "rembrandt": {
         "prompt": (
             "a baroque oil painting portrait in the style of Rembrandt, "
-            "dramatic chiaroscuro lighting, rich shadows and highlights, "
-            "detailed skin texture, painterly brush strokes, canvas texture"
+            "same age and same facial expression as the reference portrait, "
+            "realistic anatomy, dramatic chiaroscuro lighting, "
+            "rich but subtle skin texture, painterly brush strokes, canvas texture"
         ),
         "negative": (
+            "exaggerated aging, caricature, extra deep wrinkles, "
             "overexposed, flat lighting, harsh CGI, anime, cartoon, "
             "blurred, low detail, distorted face, deformed"
         ),
