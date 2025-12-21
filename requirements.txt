@@ -1,19 +1,43 @@
-# Core scientific stack
+# =========================
+# MuseAI-Prime requirements
+# =========================
+# Install with:
+#   pip install -r requirements.txt
+#
+# NOTE:
+# - GPU/CUDA builds of torch are platform-specific. If you run into torch/CUDA issues,
+#   install torch separately following https://pytorch.org/get-started/locally/
+# - For exact reproduction of Ajay's environment, use requirements.lock.txt instead.
+
+# ---- Core ML ----
 torch==2.3.1
 torchvision==0.18.1
-numpy
-pillow
-tqdm
-pyyaml
 
-# Hugging Face / diffusion tooling
+# ---- Diffusion stack ----
 diffusers==0.29.0
-transformers>=4.40.0,<5.0.0
-accelerate>=0.30.0,<1.0.0
-safetensors>=0.4.0
+transformers==4.57.3
+accelerate==0.34.2
+safetensors==0.7.0
+huggingface-hub==0.36.0
 
-# Face detection / preprocessing
-facenet-pytorch>=2.5.3
+# ---- Data + images ----
+numpy==2.2.6
+pillow==12.0.0
+opencv-python==4.12.0.88
+scipy==1.15.3
+scikit-image==0.25.2
 
-# Optional but handy
-pandas
+# ---- Face / identity tools ----
+facenet-pytorch==2.5.3
+mtcnn==1.0.0
+lpips==0.1.4
+
+# ---- Utilities ----
+tqdm==4.67.1
+PyYAML==6.0.3
+requests==2.32.5
+packaging==25.0
+
+# ---- Optional: experiment logging / analysis ----
+pandas==2.3.3
+matplotlib==3.10.7
