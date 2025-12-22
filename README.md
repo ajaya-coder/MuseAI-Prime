@@ -7,17 +7,17 @@ MuseAI-Prime is a deep learning project that recreates human portrait images in 
 
 ## ✨ Key Features
 
-- 🎨 **Strong Style Transfer via Diffusion Models**
+- **Strong Style Transfer via Diffusion Models**
   - Fine-tunes the UNet of Stable Diffusion v1.5 for painter-specific aesthetics.
-- 🧩 **Artist-Specific Conditioning**
+- **Artist-Specific Conditioning**
   - Separate text prompts and learned representations for Picasso and Rembrandt.
-- 🧑‍🦱 **Identity-Guided Img2Img Inference**
+- **Identity-Guided Img2Img Inference**
   - Uses FaceNet embeddings to select the most identity-preserving result.
-- 🔁 **Data Augmentation**
+- **Data Augmentation**
   - Expands limited art datasets using classical image transformations.
-- ⏹️ **Early Stopping**
+- **Early Stopping**
   - Prevents overfitting and unnecessary compute during long diffusion training.
-- 💻 **Reproducible CLI-based Workflow**
+- **Reproducible CLI-based Workflow**
   - Entire pipeline is runnable from the terminal.
 
 ---
