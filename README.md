@@ -155,6 +155,9 @@ python src/inference/img2img_style_identity.py \
   --guidance_scale 8.0 \
   --steps 30
 ```
+Demo of This Stylization: 
+
+https://github.com/user-attachments/assets/067aff00-3c1c-4da1-967e-d28ac9d8a633
 
 Rembrandt Stylization:
 ```bash
@@ -168,3 +171,6 @@ python src/inference/img2img_style_identity.py \
   --guidance_scale 8.0 \
   --steps 30
 ```
+Demo of This Stylization: 
+
+https://github.com/user-attachments/assets/2edf6a06-8933-47cb-b8bf-a51438d526ed
